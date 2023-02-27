@@ -1,0 +1,1 @@
+import{m as s,M as a,r as d}from"./index-f10d7621.js";const t=(e=d(""))=>{let o=null;return s(()=>{o=new a(e.value,{keyboard:!1,backdrop:!1})}),{modal:o,showModal:()=>o==null?void 0:o.show(),hideModal:()=>o==null?void 0:o.hide()}};export{t as u};

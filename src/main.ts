@@ -13,6 +13,9 @@ import Loading from 'vue-loading-overlay';
 import App from './App.vue';
 import Router from './router';
 
+import 'ant-design-vue/dist/antd.css';
+import 'vue-loading-overlay/dist/css/index.css';
+
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
 });

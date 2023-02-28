@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UserNavbar from '@/components/UserNavbar.vue';
+import UserNavbar from '@/components/Uesr/UserNavbar.vue';
 </script>
 <template>
   <div class="home container mx-auto">

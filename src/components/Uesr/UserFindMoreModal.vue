@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 const productData = toRef(props, 'tempProduct');
 const findMoreModalRef = ref<HTMLDivElement | string>('');
-const { modal, showModal, hideModal } = useModal(findMoreModalRef) // eslint-disable-line
+const { showModal, hideModal } = useModal(findMoreModalRef);
 let quantity = 1;
 
 const resetQuantity = () => {

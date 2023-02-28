@@ -6,7 +6,7 @@ import type { Product, Order, Coupon } from '@/types';
 const props = defineProps<{ deleteItem: Product | Order | Coupon }>() // eslint-disable-line
 const emit = defineEmits(['delete-item']) // eslint-disable-line
 const deleteProductModalRef = ref<HTMLDivElement | string>('');
-const { modal, showModal, hideModal } = useModal(deleteProductModalRef) // eslint-disable-line
+const { showModal, hideModal } = useModal(deleteProductModalRef);
 
 defineExpose({ showModal, hideModal });
 </script>

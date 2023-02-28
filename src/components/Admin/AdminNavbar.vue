@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios, { AxiosError } from 'axios';
-import router from '@/router';
 
-const { VITE_URL } = import.meta.env;
-
+const { VITE_URL, VITE_TOKEN } = import.meta.env;
 const route = useRoute();
+const router = useRouter();
 const currentPage = ref<string[]>([route.path]);
 
 const logout = async () => {
@@ -16,6 +15,7 @@ const logout = async () => {
     const response = await axios.post(url);
     if (response.data.success) {
       alert(response.data.message);
+      document.cookie = `${VITE_TOKEN}=; expires=${new Date(0)};`;
       router.push('/');
     }
   } catch (err: unknown) {

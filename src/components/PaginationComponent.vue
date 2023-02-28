@@ -53,8 +53,7 @@ const onClickPage = (page: number) => {
   </div>
 </template>
 
-<style scoped>
-@import 'vue-awesome-paginate/dist/style.css';
+<style>
 .pagination-component .paginate-buttons {
   width: 40px;
   height: 40px;

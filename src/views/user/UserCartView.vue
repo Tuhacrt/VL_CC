@@ -2,10 +2,10 @@
 import { reactive, onMounted, ref } from 'vue';
 import axios, { AxiosError } from 'axios';
 import { Form } from 'vee-validate';
-
 import type { UserForm, Carts, Cart, User } from '@/types';
 
 const { VITE_URL, VITE_PATH } = import.meta.env;
+const formRef = ref<typeof Form>();
 
 const state = reactive({
   cart: {} as Carts,
@@ -15,8 +15,6 @@ const state = reactive({
   } as UserForm,
   isLoading: false as boolean
 });
-
-const formRef = ref<typeof Form>();
 
 const getCart = async () => {
   const url = `${VITE_URL}/api/${VITE_PATH}/cart`;

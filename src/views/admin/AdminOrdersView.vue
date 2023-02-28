@@ -2,8 +2,8 @@
 import { onMounted, ref, reactive } from 'vue';
 import axios, { AxiosError } from 'axios';
 
-import DeleteModal from '@/components/DeleteModal.vue';
-import OrderModal from '@/components/OrderModal.vue';
+import DeleteModal from '@/components/Admin/AdminDeleteModal.vue';
+import OrderModal from '@/components/Admin/AdminOrderModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import { formatTimeToDate } from '@/utils/useDate';
 import type { Order, Pagination } from '@/types';

@@ -8,7 +8,7 @@ const props = defineProps<{ tempOrder: Order; isPaid: boolean }>();
 const emit = defineEmits(['update-paid']) // eslint-disable-line
 const orderData = toRef(props, 'tempOrder');
 const orderModalRef = ref<HTMLDivElement | string>('');
-const { modal, showModal, hideModal } = useModal(orderModalRef) // eslint-disable-line
+const { showModal, hideModal } = useModal(orderModalRef);
 
 defineExpose({ showModal, hideModal });
 </script>

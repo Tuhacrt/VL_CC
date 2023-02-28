@@ -13,6 +13,8 @@ import Loading from 'vue-loading-overlay';
 import App from './App.vue';
 import Router from './router';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'vue-awesome-paginate/dist/style.css';
 import 'ant-design-vue/dist/antd.css';
 import 'vue-loading-overlay/dist/css/index.css';
 

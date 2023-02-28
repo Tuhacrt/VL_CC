@@ -2,8 +2,8 @@
 import { onMounted, ref, reactive } from 'vue';
 import axios, { AxiosError } from 'axios';
 
-import CouponModal from '@/components/CouponModal.vue';
-import DeleteModal from '@/components/DeleteModal.vue';
+import CouponModal from '@/components/Admin/AdminCouponModal.vue';
+import DeleteModal from '@/components/Admin/AdminDeleteModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import { formatTimeToDate } from '@/utils/useDate';
 import type { Coupon, Pagination } from '@/types';
@@ -95,7 +95,7 @@ const deleteAllCoupons = async () => {
 const openModal = (modalType: string, currentCoupon: Coupon = {} as Coupon) => {
   switch (modalType) {
     case 'new':
-      state.tempCoupon = { is_enabled: 0 } as Coupon
+      state.tempCoupon = { due_date: Date.now() / 1e3, is_enabled: 0 } as Coupon
       state.isNew = true
       couponModalRef.value?.showModal()
       break

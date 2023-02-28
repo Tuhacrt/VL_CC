@@ -7,7 +7,7 @@ const props = defineProps<{ tempProduct: Product; isNew: boolean }>();
 const emit = defineEmits(['update-product']) // eslint-disable-line
 const productData = toRef(props, 'tempProduct');
 const productModalRef = ref<HTMLDivElement | string>('');
-const { modal, showModal, hideModal } = useModal(productModalRef) // eslint-disable-line
+const { showModal, hideModal } = useModal(productModalRef);
 
 const initializeProductImages = () => {
   productData.value.imagesUrl = [''];

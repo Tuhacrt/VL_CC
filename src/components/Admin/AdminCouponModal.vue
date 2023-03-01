@@ -128,18 +128,17 @@ defineExpose({ showModal, hideModal });
           <div class="mb-3">
             <div class="form-check">
               <label class="form-check-label" for="is_enabled"> 是否啟用 </label>
-              <Field
+              <input
                 id="is_enabled"
                 v-model="couponData.is_enabled"
+                as="my-checkbox"
                 name="is_enabled"
                 label="是否啟用"
                 class="form-check-input"
                 type="checkbox"
                 :true-value="1"
                 :false-value="0"
-                rules="required"
               />
-              <ErrorMessage name="is_enabled" class="invalid-feedback" />
             </div>
           </div>
           <div class="modal-footer">

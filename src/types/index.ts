@@ -75,7 +75,7 @@ export interface Order {
   num: number;
 }
 
-interface Article {
+export interface Article {
   title: string;
   description: string;
   image: string;

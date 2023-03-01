@@ -2,8 +2,8 @@
 import UserNavbar from '@/components/Uesr/UserNavbar.vue';
 </script>
 <template>
-  <div class="home container mx-auto">
-    <UserNavbar></UserNavbar>
+  <UserNavbar></UserNavbar>
+  <div class="container mx-auto">
     <!-- <nav class="d-flex justify-content-evenly mx-auto" style="width: 700px">
       <router-link to="/"> Home Page </router-link>
       <router-link to="/products"> Products </router-link>

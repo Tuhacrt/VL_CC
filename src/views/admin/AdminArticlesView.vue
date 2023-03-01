@@ -5,7 +5,7 @@ import axios, { AxiosError } from 'axios';
 // import ProductModal from '../../components/ProductModal.vue';
 // import DeleteModal from '../../components/DeleteModal.vue';
 import type { Product, Pagination } from '@/types';
-import PaginationComponent from '../../components/PaginationComponent.vue';
+import PaginationComponent from '@/components/PaginationComponent.vue';
 
 const { VITE_URL, VITE_PATH, VITE_TEXT } = import.meta.env;
 

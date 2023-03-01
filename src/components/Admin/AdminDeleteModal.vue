@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import useModal from '@/utils/useModal';
-import type { Product, Order, Coupon } from '@/types';
+import type { Product, Order, Coupon, Article } from '@/types';
 
-const props = defineProps<{ deleteItem: Product | Order | Coupon }>() // eslint-disable-line
-const emit = defineEmits(['delete-item']) // eslint-disable-line
+const props = defineProps<{ deleteItem: Product | Order | Coupon | Article }>(); // eslint-disable-line
+const emit = defineEmits(['delete-item']); // eslint-disable-line
 const deleteProductModalRef = ref<HTMLDivElement | string>('');
 const { showModal, hideModal } = useModal(deleteProductModalRef);
 

@@ -65,7 +65,6 @@ const logout = async () => {
           <router-link to="/" style="text-decoration: none; color: inherit" @click.prevent="logout"
             >Logout</router-link
           >
-          <!-- <a href="#" class="nav-link fw-bolder" >Logout</a> -->
         </a-menu-item>
       </a-menu>
     </a-layout-sider>

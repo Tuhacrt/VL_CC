@@ -2,8 +2,8 @@
 import { onMounted, ref, reactive } from 'vue';
 import axios, { AxiosError } from 'axios';
 
-import CouponModal from '@/components/Admin/AdminCouponModal.vue';
-import DeleteModal from '@/components/Admin/AdminDeleteModal.vue';
+import CouponModal from '@/components/admin/AdminCouponModal.vue';
+import DeleteModal from '@/components/admin/AdminDeleteModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import { formatTimeToDate } from '@/utils/useDate';
 import type { Coupon, Pagination } from '@/types';

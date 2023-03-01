@@ -10,6 +10,16 @@ import AllRules from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 import Loading from 'vue-loading-overlay';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+// import {} from '@fortawesome/free-regular-svg-icons';
+import {
+  faEnvelope,
+  faPhone,
+  faHeadphones,
+  faLocationDot
+} from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import App from './App.vue';
 import Router from './router';
 
@@ -27,6 +37,8 @@ configure({
 });
 setLocale('zh_TW');
 
+library.add(faEnvelope, faPhone, faHeadphones, faLocationDot, faFacebook, faInstagram);
+
 createApp(App)
   .use(createPinia())
   .use(Router)
@@ -37,4 +49,5 @@ createApp(App)
   .component('Field', Field)
   .component('ErrorMessage', ErrorMessage)
   .component('Loading', Loading)
+  .component('font-awesome-icon', FontAwesomeIcon)
   .mount('#app');

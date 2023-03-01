@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import UserNavbar from '@/components/Uesr/UserNavbar.vue';
+import UserNavbar from '@/components/user/UserNavbar.vue';
+import UserFooter from '@/components/user/UserFooter.vue';
 </script>
 <template>
   <UserNavbar></UserNavbar>
@@ -12,4 +13,5 @@ import UserNavbar from '@/components/Uesr/UserNavbar.vue';
     </nav> -->
     <router-view />
   </div>
+  <UserFooter></UserFooter>
 </template>

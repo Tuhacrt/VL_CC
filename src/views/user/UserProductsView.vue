@@ -3,7 +3,7 @@ import { reactive, onMounted, ref } from 'vue';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'vue-router';
 
-import FindMoreModal from '@/components/Uesr/UserFindMoreModal.vue';
+import FindMoreModal from '@/components/user/UserFindMoreModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import type { Product, Pagination } from '@/types';
 

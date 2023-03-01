@@ -2,8 +2,8 @@
 import { onMounted, ref, reactive } from 'vue';
 import axios, { AxiosError } from 'axios';
 
-import ProductModal from '@/components/Admin/AdminProductModal.vue';
-import DeleteModal from '@/components/Admin/AdminDeleteModal.vue';
+import ProductModal from '@/components/admin/AdminProductModal.vue';
+import DeleteModal from '@/components/admin/AdminDeleteModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import type { Product, Pagination } from '@/types';
 

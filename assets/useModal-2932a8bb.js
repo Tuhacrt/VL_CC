@@ -1,1 +1,0 @@
-import{f as e,l as s,M as d}from"./index-f073120f.js";const t=(l=e(""))=>{const a=e(null);return s(()=>{a.value=new d(l.value,{keyboard:!1,backdrop:!1})}),{modal:a,showModal:()=>{var o;return(o=a.value)==null?void 0:o.show()},hideModal:()=>{var o;return(o=a.value)==null?void 0:o.hide()}}};export{t as u};

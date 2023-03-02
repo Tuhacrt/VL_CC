@@ -5,6 +5,7 @@ const { VITE_URL, VITE_TOKEN } = import.meta.env;
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
+  linkExactActiveClass: 'active',
   routes: [
     {
       path: '/',

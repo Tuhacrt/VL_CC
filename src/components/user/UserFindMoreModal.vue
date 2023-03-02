@@ -5,7 +5,7 @@ import type { Product } from '@/types';
 
 const props = defineProps<{
   tempProduct: Product;
-  addToCart: (productId: string, quantity: number) => void // eslint-disable-line
+  addToCart: (productId: string, quantity: number) => void;
 }>();
 const productData = toRef(props, 'tempProduct');
 const findMoreModalRef = ref<HTMLDivElement | string>('');

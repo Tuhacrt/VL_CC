@@ -4,7 +4,7 @@ import { createPinia } from 'pinia';
 import 'bootstrap';
 import VueAwesomePaginate from 'vue-awesome-paginate';
 import Antd from 'ant-design-vue';
-import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate' // eslint-disable-line
+import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate';
 
 import AllRules from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
@@ -12,12 +12,12 @@ import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 import Loading from 'vue-loading-overlay';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-// import {} from '@fortawesome/free-regular-svg-icons';
 import {
   faEnvelope,
   faPhone,
   faHeadphones,
-  faLocationDot
+  faLocationDot,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import App from './App.vue';
@@ -37,7 +37,7 @@ configure({
 });
 setLocale('zh_TW');
 
-library.add(faEnvelope, faPhone, faHeadphones, faLocationDot, faFacebook, faInstagram);
+library.add(faEnvelope, faPhone, faHeadphones, faLocationDot, faBars, faFacebook, faInstagram);
 
 createApp(App)
   .use(createPinia())

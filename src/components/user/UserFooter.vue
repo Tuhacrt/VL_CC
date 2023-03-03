@@ -59,6 +59,7 @@
 
 <style lang="scss" scoped>
 .footer {
+  // background-color: #000;
   &-logo a {
     color: #2c3e50;
   }

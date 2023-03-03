@@ -30,6 +30,7 @@ module.exports = {
     'no-alert': 'off',
     'no-console': 'off',
     'no-unused-vars': 'off',
-    'prettier/prettier': ['warn', { semi: true }]
+    'prettier/prettier': ['warn', { semi: true }],
+    'import/prefer-default-export': 'off'
   }
 };

@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Collapse } from 'bootstrap';
+import UserCartStore from './UserCartStore.vue';
 
 const collapseRef = ref<HTMLDivElement | string>('');
 const collapse = ref<Collapse | null>(null);
@@ -39,10 +40,12 @@ watch(router, () => {
         class="navbar-text justify-content-end collapse navbar-collapse"
       >
         <ul class="navbar-nav pt-2">
-          <router-link to="/" class="ps-0 ps-md-5"> 最新消息 </router-link>
-          <router-link to="/products" class="ps-0 ps-md-5"> 所有產品 </router-link>
-          <router-link to="/cart" class="ps-0 ps-md-5"> 購物車 </router-link>
-          <router-link to="/admin/products" class="ps-0 ps-md-5"> 後檯介面 </router-link>
+          <router-link to="/" class="pe-0 pe-md-5"> 最新消息 </router-link>
+          <router-link to="/products" class="pe-0 pe-md-5"> 所有產品 </router-link>
+          <router-link to="/cart" class="pe-0 pe-md-5 position-relative">
+            購物車 <UserCartStore />
+          </router-link>
+          <router-link to="/admin/products" class="pe-0 pe-md-0"> 後檯介面 </router-link>
         </ul>
       </div>
     </div>

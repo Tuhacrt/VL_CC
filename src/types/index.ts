@@ -23,6 +23,7 @@ export interface Pagination {
 
 export interface Products {
   products: Product[];
+  pagination: Pagination;
 }
 
 export interface User {

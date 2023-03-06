@@ -11,8 +11,8 @@ const modules = [Navigation, Pagination];
 <template>
   <div class="likes container-fluid py-4 py-md-7">
     <div class="container">
-      <div class="likes-title text-start d-flex justify-content-between">
-        <h2 class="pb-4">您可能會喜歡</h2>
+      <div class="likes-title text-start d-flex justify-content-between pb-1">
+        <h2 class="pb-3">您可能會喜歡</h2>
         <router-link to="/products" class="btn mb-4">查看更多</router-link>
       </div>
       <swiper

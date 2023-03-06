@@ -20,7 +20,7 @@
           <ul class="d-flex text-start flex-column flex-xl-row px-0 list-unstyled">
             <li class="ps-0 px-xl-3 px-xxl-4">
               <a href="#" class="lh-lg">
-                <font-awesome-icon icon="fas fa-fw fa-phone " class="pe-2 fs-5" /> 0912-345678</a
+                <font-awesome-icon icon="fas fa-fw fa-phone " class="pe-2 fs-5" />0912-345678</a
               >
             </li>
             <li class="ps-0 px-xl-3 px-xxl-4">
@@ -70,6 +70,9 @@
 
   &-contact {
     padding-top: 12px;
+    svg {
+      width: 20px;
+    }
     a {
       font-weight: 500;
       font-size: 16px;

@@ -70,14 +70,13 @@ defineExpose({ showModal, hideModal });
                   <button
                     type="button"
                     class="btn btn-primary"
-                    @click="addToCart(productData.id, quantity), resetQuantity()"
+                    @click="addToCart(productData.id, quantity), resetQuantity(), hideModal()"
                   >
                     加入購物車
                   </button>
                 </div>
               </div>
             </div>
-            <!-- col-sm-6 end -->
           </div>
         </div>
       </div>

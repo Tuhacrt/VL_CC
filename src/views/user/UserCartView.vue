@@ -1,45 +1,43 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import axios, { AxiosError } from 'axios';
 import { Form } from 'vee-validate';
+import { storeToRefs } from 'pinia';
+
 import type { UserForm, User } from '@/types';
 import { useCartStore } from '@/stores/cartStore';
-import { storeToRefs } from 'pinia';
+import { useLoadingStore } from '@/stores/loadingStore';
 
 const { VITE_URL, VITE_PATH } = import.meta.env;
 const formRef = ref<typeof Form>();
-const store = useCartStore();
-const { getCart, updateCart, deleteAllCarts, deleteCartItem } = store;
-const { carts } = storeToRefs(store);
 
-const state = reactive({
-  form: {
-    user: {} as User,
-    message: '' as string
-  } as UserForm,
-  isLoading: false as boolean
+const loadingStore = useLoadingStore();
+const { isLoading } = storeToRefs(loadingStore);
+const cartStore = useCartStore();
+const { getCart, updateCart, deleteAllCarts, deleteCartItem } = cartStore;
+const { carts } = storeToRefs(cartStore);
+
+const form = ref<UserForm>({
+  user: {} as User,
+  message: '' as string
 });
 
 const createOrder = async () => {
   const url = `${VITE_URL}/api/${VITE_PATH}/order`;
-  const data = state.form;
-  state.isLoading = true;
+  const data = form.value;
+  isLoading.value = true;
 
   try {
     const response = await axios.post(url, { data });
-    state.isLoading = false;
+    isLoading.value = false;
     formRef.value?.resetForm();
     alert(response.data.message);
     getCart();
   } catch (err: unknown) {
-    state.isLoading = false;
+    isLoading.value = false;
     if (err instanceof AxiosError) alert(err.response?.data.message);
   }
 };
-
-onMounted(() => {
-  getCart();
-});
 </script>
 
 <template>
@@ -75,7 +73,7 @@ onMounted(() => {
                 <button
                   type="button"
                   class="btn btn-outline-danger btn-sm"
-                  :disabled="state.isLoading"
+                  :disabled="isLoading"
                   @click="deleteCartItem(item.id)"
                 >
                   <div>移除購物車</div>
@@ -96,7 +94,7 @@ onMounted(() => {
                       min="1"
                       type="number"
                       class="form-control"
-                      :disabled="state.isLoading"
+                      :disabled="isLoading"
                       @change="updateCart(item)"
                     />
                     <span id="basic-addon2" class="input-group-text">{{ item.product.unit }}</span>
@@ -137,7 +135,7 @@ onMounted(() => {
           <label for="email" class="form-label">Email</label>
           <Field
             id="email"
-            v-model="state.form.user.email"
+            v-model="form.user.email"
             name="email"
             label="Email"
             type="email"
@@ -152,7 +150,7 @@ onMounted(() => {
           <label for="name" class="form-label">收件人姓名</label>
           <Field
             id="name"
-            v-model="state.form.user.name"
+            v-model="form.user.name"
             name="name"
             label="姓名"
             type="text"
@@ -167,7 +165,7 @@ onMounted(() => {
           <label for="tel" class="form-label">收件人電話</label>
           <Field
             id="tel"
-            v-model="state.form.user.tel"
+            v-model="form.user.tel"
             name="tel"
             label="電話"
             type="tel"
@@ -182,7 +180,7 @@ onMounted(() => {
           <label for="address" class="form-label">收件人地址</label>
           <Field
             id="address"
-            v-model="state.form.user.address"
+            v-model="form.user.address"
             name="address"
             label="地址"
             type="text"
@@ -197,7 +195,7 @@ onMounted(() => {
           <label for="message" class="form-label">留言</label>
           <Field
             id="message"
-            v-model="state.form.message"
+            v-model="form.message"
             name="message"
             as="textarea"
             class="form-control"
@@ -206,7 +204,7 @@ onMounted(() => {
           />
         </div>
         <div class="text-end">
-          <button type="submit" class="btn btn-danger" :disabled="!carts?.total || state.isLoading">
+          <button type="submit" class="btn btn-danger" :disabled="!carts?.total || isLoading">
             送出訂單
           </button>
         </div>
@@ -215,6 +213,6 @@ onMounted(() => {
     <!-- Form -->
   </div>
   <!--  Loading Component-->
-  <Loading v-model:active="state.isLoading" :can-cancel="true" :is-full-page="true" />
+  <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="true" />
   <!--  Loading Component-->
 </template>

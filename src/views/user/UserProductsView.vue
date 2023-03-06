@@ -1,70 +1,32 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref } from 'vue';
-import axios, { AxiosError } from 'axios';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
+import type { Product } from '@/types';
 import FindMoreModal from '@/components/user/UserFindMoreModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import { useCartStore } from '@/stores/cartStore';
-import type { Product, Pagination } from '@/types';
+import { useProductStore } from '@/stores/productStore'; // eslint-disable-line
+import { useLoadingStore } from '@/stores/loadingStore';
 
-const { VITE_URL, VITE_PATH } = import.meta.env;
-
-const router = useRouter();
-const store = useCartStore();
-const { addToCart } = store;
 const findMoreModalRef = ref<typeof FindMoreModal>();
 
-const state = reactive({
-  products: [] as Product[],
-  pagination: {} as Pagination,
-  tempProduct: {
-    imagesUrl: [] as string[]
-  } as Product,
-  isLoading: false as boolean
-});
-
-const getProductList = async (currentPage: number = state.pagination.current_page || 1) => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/products?page=${currentPage}`;
-  state.isLoading = true;
-
-  try {
-    const response = await axios.get(url);
-    state.isLoading = false;
-    state.products = response.data.products;
-    state.pagination = response.data.pagination;
-  } catch (err: unknown) {
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
-
-onMounted(() => {
-  getProductList();
-});
+const loadingStore = useLoadingStore();
+const { isLoading } = storeToRefs(loadingStore);
+const productStore = useProductStore();
+const { getProductList, gotToProduct } = productStore;
+const { products, tempProduct } = storeToRefs(productStore);
+const cartStore = useCartStore();
+const { addToCart } = cartStore;
 
 const openModal = (modalType: string, currentProduct: Product) => {
   switch (modalType) {
     case 'findMore':
-      state.tempProduct = { ...currentProduct } as Product;
+      tempProduct.value = { ...currentProduct } as Product;
       findMoreModalRef.value?.showModal();
       break;
     default:
       break;
-  }
-};
-
-const goToAbout = async (currentProduct: Product) => {
-  const { id } = currentProduct;
-  const url = `${VITE_URL}/api/${VITE_PATH}/product/${id}`;
-  state.tempProduct = { ...currentProduct } as Product;
-  state.isLoading = true;
-
-  try {
-    await axios.get(url);
-    state.isLoading = false;
-    router.push(`/product/${id}`);
-  } catch (err: unknown) {
-    if (err instanceof AxiosError) alert(err.response?.data.message);
   }
 };
 </script>
@@ -82,8 +44,8 @@ const goToAbout = async (currentProduct: Product) => {
             <th />
           </tr>
         </thead>
-        <tbody v-if="state.products?.length">
-          <tr v-for="product in state?.products" :key="product.id">
+        <tbody v-if="products?.products?.length">
+          <tr v-for="product in products?.products" :key="product.id">
             <td style="width: 200px">
               <div
                 v-if="product.imagesUrl"
@@ -104,8 +66,8 @@ const goToAbout = async (currentProduct: Product) => {
                 <button
                   type="button"
                   class="btn btn-outline-secondary"
-                  :disabled="state.isLoading"
-                  @click="goToAbout(product)"
+                  :disabled="isLoading"
+                  @click="gotToProduct(product)"
                 >
                   詳細希望
                 </button>
@@ -113,7 +75,7 @@ const goToAbout = async (currentProduct: Product) => {
                 <button
                   type="button"
                   class="btn btn-outline-secondary"
-                  :disabled="state.isLoading"
+                  :disabled="isLoading"
                   @click="openModal('findMore', product)"
                 >
                   查看更多
@@ -121,7 +83,7 @@ const goToAbout = async (currentProduct: Product) => {
                 <button
                   type="button"
                   class="btn btn-outline-danger"
-                  :disabled="state.isLoading"
+                  :disabled="isLoading"
                   @click="addToCart(product.id)"
                 >
                   加到購物車
@@ -137,20 +99,16 @@ const goToAbout = async (currentProduct: Product) => {
     <div class="d-flex justify-content-center">
       <PaginationComponent
         ref="paginationComponentRef"
-        :pagination="state.pagination"
+        :pagination="products?.pagination"
         @change-page="getProductList"
       />
     </div>
     <!-- Pagination -->
   </div>
   <!-- Modal -->
-  <FindMoreModal
-    ref="findMoreModalRef"
-    :temp-product="state.tempProduct"
-    :add-to-cart="addToCart"
-  />
+  <FindMoreModal ref="findMoreModalRef" :temp-product="tempProduct" :add-to-cart="addToCart" />
   <!-- Modal -->
   <!--  Loading Component-->
-  <Loading v-model:active="state.isLoading" :can-cancel="true" :is-full-page="true" />
+  <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="true" />
   <!--  Loading Component-->
 </template>

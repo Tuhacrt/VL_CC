@@ -2,77 +2,23 @@
 import { reactive, onMounted, ref } from 'vue';
 import axios, { AxiosError } from 'axios';
 import { Form } from 'vee-validate';
-import type { UserForm, Carts, Cart, User } from '@/types';
+import type { UserForm, User } from '@/types';
+import { useCartStore } from '@/stores/cartStore';
+import { storeToRefs } from 'pinia';
 
 const { VITE_URL, VITE_PATH } = import.meta.env;
 const formRef = ref<typeof Form>();
+const store = useCartStore();
+const { getCart, updateCart, deleteAllCarts, deleteCartItem } = store;
+const { carts } = storeToRefs(store);
 
 const state = reactive({
-  cart: {} as Carts,
   form: {
     user: {} as User,
     message: '' as string
   } as UserForm,
   isLoading: false as boolean
 });
-
-const getCart = async () => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/cart`;
-  state.isLoading = true;
-
-  try {
-    const response = await axios.get(url);
-    state.isLoading = false;
-    state.cart = response.data.data;
-  } catch (err: unknown) {
-    state.isLoading = false;
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
-
-const updateCart = async (cartData: Cart) => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/cart/${cartData.id}`;
-  const data = { product_id: cartData.id, qty: cartData.qty };
-  state.isLoading = true;
-
-  try {
-    const response = await axios.put(url, { data });
-    state.isLoading = false;
-    alert(response.data.message);
-    getCart();
-  } catch (err: unknown) {
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
-
-const deleteAllCarts = async () => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/carts`;
-  state.isLoading = true;
-
-  try {
-    const response = await axios.delete(url);
-    state.isLoading = false;
-    alert(response.data.message);
-    getCart();
-  } catch (err: unknown) {
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
-
-const deleteCartItem = async (productId: string) => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/cart/${productId}`;
-  state.isLoading = true;
-
-  try {
-    const response = await axios.delete(url);
-    state.isLoading = false;
-    alert(response.data.message);
-    getCart();
-  } catch (err: unknown) {
-    state.isLoading = false;
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
 
 const createOrder = async () => {
   const url = `${VITE_URL}/api/${VITE_PATH}/order`;
@@ -81,6 +27,7 @@ const createOrder = async () => {
 
   try {
     const response = await axios.post(url, { data });
+    state.isLoading = false;
     formRef.value?.resetForm();
     alert(response.data.message);
     getCart();
@@ -103,13 +50,13 @@ onMounted(() => {
         <button
           class="btn btn-outline-danger"
           type="button"
-          :disabled="!state.cart?.carts?.length"
+          :disabled="!carts?.carts?.length"
           @click="deleteAllCarts"
         >
           清空購物車
         </button>
       </div>
-      <div v-if="!state.cart?.carts?.length" class="h1 text-white font-weight-bold bg-dark">
+      <div v-if="!carts?.carts?.length" class="h1 text-white font-weight-bold bg-dark">
         購物車是空的喔！
       </div>
       <table v-else class="table align-middle">
@@ -122,8 +69,8 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody>
-          <template v-if="state.cart?.carts">
-            <tr v-for="item in state.cart.carts" :key="item.id">
+          <template v-if="carts?.carts">
+            <tr v-for="item in carts.carts" :key="item.id">
               <td>
                 <button
                   type="button"
@@ -166,16 +113,16 @@ onMounted(() => {
           </template>
         </tbody>
         <tfoot>
-          <tr v-if="state.cart.final_total < state.cart.total">
+          <tr v-if="carts.final_total < carts.total">
             <td colspan="3" class="text-end text-success">折扣價</td>
             <td class="text-end text-success">
-              {{ state.cart.final_total }}
+              {{ carts.final_total }}
             </td>
           </tr>
           <tr v-else>
             <td colspan="3" class="text-end">總計</td>
             <td class="text-end">
-              {{ state.cart.total }}
+              {{ carts.total }}
             </td>
           </tr>
         </tfoot>
@@ -259,11 +206,7 @@ onMounted(() => {
           />
         </div>
         <div class="text-end">
-          <button
-            type="submit"
-            class="btn btn-danger"
-            :disabled="!state.cart?.total || state.isLoading"
-          >
+          <button type="submit" class="btn btn-danger" :disabled="!carts?.total || state.isLoading">
             送出訂單
           </button>
         </div>

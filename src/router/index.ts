@@ -13,7 +13,7 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'Index',
+          name: '首頁',
           component: () => import('@/views/user/UserIndexView.vue')
         },
         {

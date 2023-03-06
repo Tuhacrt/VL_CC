@@ -1,18 +1,18 @@
-import { ref, computed, reactive } from 'vue';
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios, { AxiosError } from 'axios';
 import type { Carts, Cart } from '@/types';
 
 const { VITE_URL, VITE_PATH } = import.meta.env;
 
-export const useCartStore = defineStore('counter', () => {
-  const cart = ref<Carts | null>(null);
+export const useCartStore = defineStore('cart', () => {
+  const carts = ref<Carts | null>(null);
   const getCart = async () => {
     const url = `${VITE_URL}/api/${VITE_PATH}/cart`;
 
     try {
       const response = await axios.get(url);
-      cart.value = response.data.data;
+      carts.value = response.data.data;
     } catch (err: unknown) {
       if (err instanceof AxiosError) alert(err.response?.data.message);
     }
@@ -24,17 +24,58 @@ export const useCartStore = defineStore('counter', () => {
 
     try {
       const response = await axios.put(url, { data });
+      console.log(response.data.message);
+      getCart();
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) alert(err.response?.data.message);
+    }
+  };
+
+  const addToCart = async (productId: string, quantity = 1) => {
+    const url = `${VITE_URL}/api/${VITE_PATH}/cart`;
+    const data = { product_id: productId, qty: quantity };
+    // state.isLoading = true;
+
+    try {
+      const response = await axios.post(url, { data });
+      // state.isLoading = false;
+      // findMoreModalRef.value?.hideModal();
+      console.log(response.data.message);
+      getCart();
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) alert(err.response?.data.message);
+    }
+    // };
+  };
+
+  const deleteAllCarts = async () => {
+    const url = `${VITE_URL}/api/${VITE_PATH}/carts`;
+    // state.isLoading = true;
+
+    try {
+      const response = await axios.delete(url);
+      // state.isLoading = false;
       alert(response.data.message);
       getCart();
     } catch (err: unknown) {
       if (err instanceof AxiosError) alert(err.response?.data.message);
     }
   };
-  // const count = ref(0);
-  // const doubleCount = computed(() => count.value * 2);
-  // function increment() {
-  //   count.value += 1;
-  // }
 
-  return { cart, getCart, updateCart };
+  const deleteCartItem = async (productId: string) => {
+    const url = `${VITE_URL}/api/${VITE_PATH}/cart/${productId}`;
+    // state.isLoading = true;
+
+    try {
+      const response = await axios.delete(url);
+      // state.isLoading = false;
+      alert(response.data.message);
+      getCart();
+    } catch (err: unknown) {
+      // state.isLoading = false;
+      if (err instanceof AxiosError) alert(err.response?.data.message);
+    }
+  };
+
+  return { carts, getCart, updateCart, addToCart, deleteAllCarts, deleteCartItem };
 });

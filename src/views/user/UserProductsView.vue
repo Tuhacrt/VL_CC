@@ -5,9 +5,15 @@ import { useRouter } from 'vue-router';
 
 import FindMoreModal from '@/components/user/UserFindMoreModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
+import { useCartStore } from '@/stores/cartStore';
 import type { Product, Pagination } from '@/types';
 
 const { VITE_URL, VITE_PATH } = import.meta.env;
+
+const router = useRouter();
+const store = useCartStore();
+const { addToCart } = store;
+const findMoreModalRef = ref<typeof FindMoreModal>();
 
 const state = reactive({
   products: [] as Product[],
@@ -18,10 +24,6 @@ const state = reactive({
   isLoading: false as boolean
 });
 
-const router = useRouter();
-
-const findMoreModalRef = ref<typeof FindMoreModal>();
-
 const getProductList = async (currentPage: number = state.pagination.current_page || 1) => {
   const url = `${VITE_URL}/api/${VITE_PATH}/products?page=${currentPage}`;
   state.isLoading = true;
@@ -31,21 +33,6 @@ const getProductList = async (currentPage: number = state.pagination.current_pag
     state.isLoading = false;
     state.products = response.data.products;
     state.pagination = response.data.pagination;
-  } catch (err: unknown) {
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
-
-const addToCart = async (productId: string, quantity = 1) => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/cart`;
-  const data = { product_id: productId, qty: quantity };
-  state.isLoading = true;
-
-  try {
-    const response = await axios.post(url, { data });
-    state.isLoading = false;
-    findMoreModalRef.value?.hideModal();
-    alert(response.data.message);
   } catch (err: unknown) {
     if (err instanceof AxiosError) alert(err.response?.data.message);
   }
@@ -108,7 +95,7 @@ const goToAbout = async (currentProduct: Product) => {
             <td>
               <div v-if="product.price < product.origin_price">
                 <del class="h6">原價 {{ product.origin_price }} 元</del>
-                <div class="h5">現在只要 {{ product.price }} 元</div>
+                <div class="h5">{{ product.price }} 元</div>
               </div>
               <div v-else class="h5">{{ product.origin_price }} 元</div>
             </td>

@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Collapse } from 'bootstrap';
-import UserCartStore from './UserCartStore.vue';
+import UserCartCouterIcon from './UserCartCouterIcon.vue';
 
 const collapseRef = ref<HTMLDivElement | string>('');
 const collapse = ref<Collapse | null>(null);
@@ -43,7 +43,7 @@ watch(router, () => {
           <router-link to="/" class="pe-0 pe-md-5"> 最新消息 </router-link>
           <router-link to="/products" class="pe-0 pe-md-5"> 所有產品 </router-link>
           <router-link to="/cart" class="pe-0 pe-md-5 position-relative">
-            購物車 <UserCartStore />
+            購物車 <UserCartCouterIcon />
           </router-link>
           <router-link to="/admin/products" class="pe-0 pe-md-0"> 後檯介面 </router-link>
         </ul>

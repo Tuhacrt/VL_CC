@@ -51,7 +51,7 @@
 <style lang="scss" scoped>
 @import '@/assets/all.scss';
 .temp {
-  background-image: url('@/images/cc_beach.jpg');
+  background-image: url('@/images/cc_beach.jpeg');
 }
 .card {
   height: 280px;

@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import axios, { AxiosError } from 'axios';
-
 import { useRoute } from 'vue-router';
+
+import { useCartStore } from '@/stores/cartStore';
 import type { Product } from '@/types';
 
 const { VITE_URL, VITE_PATH } = import.meta.env;
 const route = useRoute();
-
+const store = useCartStore();
+const { addToCart } = store;
 const state = reactive({
   product: {} as Product,
   isLoading: false as boolean
 });
-let quantity = 1;
+const quantity = 1;
 
 const getProduct = async () => {
   const { id } = route.params;
@@ -23,21 +25,6 @@ const getProduct = async () => {
     const response = await axios.get(url);
     state.isLoading = false;
     state.product = response.data.product;
-  } catch (err: unknown) {
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
-
-const addToCart = async (productId: string, productQuantity = 1) => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/cart`;
-  const data = { product_id: productId, qty: productQuantity };
-  state.isLoading = true;
-
-  try {
-    const response = await axios.post(url, { data });
-    state.isLoading = false;
-    quantity = 1;
-    alert(response.data.message);
   } catch (err: unknown) {
     if (err instanceof AxiosError) alert(err.response?.data.message);
   }

@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import { useCartStore } from '@/stores/cartStore';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const store = useCartStore();
+const { carts } = storeToRefs(store);
+const { getCart } = store;
+
+onMounted(() => {
+  getCart();
+});
 </script>
 <template>
   <span
+    v-if="carts?.carts.length"
     class="cart-store position-absolute top-50 translate-middle p-1 border border-light rounded-circle text-white"
   >
+    {{ carts?.carts.length }}
     <span class="visually-hidden"></span>
   </span>
 </template>

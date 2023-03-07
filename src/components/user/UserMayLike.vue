@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation, Pagination } from 'swiper';
+import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper';
 import { RouterLink } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
 
-const modules = [Navigation, Pagination];
+import { useProductStore } from '@/stores/productStore';
+import { numberToNTD } from '@/utils/useMoney';
+
+const productStore = useProductStore();
+const { gotToProduct } = productStore;
+const { products } = storeToRefs(productStore);
+
+const modules = [Navigation, Pagination, Autoplay, EffectFade];
 </script>
 <template>
   <div class="likes container-fluid py-4 py-md-7">
@@ -16,57 +25,38 @@ const modules = [Navigation, Pagination];
         <router-link to="/products" class="btn mb-4">查看更多</router-link>
       </div>
       <swiper
+        v-if="products?.products?.length"
         :modules="modules"
-        :slides-per-view="3"
+        :slides-per-view="1.5"
         :speed="1200"
+        :autoplay="{ delay: 3000, disableOnInteraction: false }"
         :loop="true"
-        :space-between="30"
+        :space-between="12"
         :pagination="{ clickable: true }"
+        :breakpoints="{
+          767: {
+            slidesPerView: 3,
+            spaceBetween: 24
+          }
+        }"
         style="--swiper-theme-color: #ce9d7b"
       >
         <!-- :navigation="true" -->
-        <swiper-slide
+        <swiper-slide v-for="product in products?.products" :key="product.id"
           ><div class="card rounded-0">
-            <img class="card-img rounded-0" src="@/images/cc_beach.jpeg" alt="" />
-            <div
-              class="card-body card-img-overlay bg-black text-start rounded-0"
-              style="--bs-bg-opacity: 0.5"
-            >
-              <h5 class="card-title text-white pb-3 border-bottom mb-3">旅游拍攝</h5>
-              <p class="card-text text-white">
-                因應後疫情潮流，VLCC旅拍服務即日起 至2/13日享有9折優惠。
-              </p>
+            <div class="card-body text-start rounded-0 p-2">
+              <div class="card-image pb-2">
+                <img class="card-img rounded-0" :src="`${product?.imagesUrl[0]}`" alt="" />
+              </div>
+              <h6 class="card-title">{{ product.title }}</h6>
+              <p class="card-text fs-6">{{ numberToNTD(product?.price) }}</p>
             </div>
-          </div></swiper-slide
-        >
-        <swiper-slide
-          ><div class="card rounded-0">
-            <img class="card-img rounded-0" src="@/images/cc_beach.jpeg" alt="" />
-            <div
-              class="card-body card-img-overlay bg-black text-start rounded-0"
-              style="--bs-bg-opacity: 0.5"
-            >
-              <h5 class="card-title text-white pb-3 border-bottom mb-3">旅游拍攝</h5>
-              <p class="card-text text-white">
-                因應後疫情潮流，VLCC旅拍服務即日起 至2/13日享有9折優惠。
-              </p>
-            </div>
-          </div></swiper-slide
-        >
-        <swiper-slide
-          ><div class="card rounded-0">
-            <img class="card-img rounded-0" src="@/images/cc_beach.jpeg" alt="" />
-            <div
-              class="card-body card-img-overlay bg-black text-start rounded-0"
-              style="--bs-bg-opacity: 0.5"
-            >
-              <h5 class="card-title text-white pb-3 border-bottom mb-3">旅游拍攝</h5>
-              <p class="card-text text-white">
-                因應後疫情潮流，VLCC旅拍服務即日起 至2/13日享有9折優惠。
-              </p>
-            </div>
-          </div></swiper-slide
-        >
+            <button
+              type="button"
+              class="btn stretched-link"
+              @click.prevent="gotToProduct(product)"
+            /></div
+        ></swiper-slide>
       </swiper>
     </div>
   </div>
@@ -77,32 +67,29 @@ const modules = [Navigation, Pagination];
 
 .likes {
   background-color: #fff7f2;
-}
-.temp {
-  background-image: url('@/images/cc_beach.jpeg');
-}
-
-.likes-title {
-  a {
+  &-title a {
     text-decoration: none;
     font-weight: bold;
     color: #ce9d7b;
     border: 2px solid #ce9d7b;
   }
 }
+
 .card {
-  height: 280px;
+  height: 240px;
 
   &-img {
     object-fit: cover;
-    height: 100%;
-    &-overlay {
-      top: 50%;
-      height: 50%;
-      @include media-breakpoint-up(xl) {
-        top: 60%;
-        height: 40%;
-      }
+    height: 156px;
+  }
+  &-text {
+    color: #ce9d7b;
+  }
+
+  @include media-breakpoint-up(md) {
+    height: 280px;
+    &-img {
+      height: 200px;
     }
   }
 }

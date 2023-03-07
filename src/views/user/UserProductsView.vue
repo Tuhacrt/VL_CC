@@ -69,7 +69,7 @@ const openModal = (modalType: string, currentProduct: Product) => {
                   :disabled="isLoading"
                   @click="gotToProduct(product)"
                 >
-                  詳細希望
+                  詳細頁面
                 </button>
 
                 <button
@@ -78,7 +78,7 @@ const openModal = (modalType: string, currentProduct: Product) => {
                   :disabled="isLoading"
                   @click="openModal('findMore', product)"
                 >
-                  查看更多
+                  查看描述
                 </button>
                 <button
                   type="button"

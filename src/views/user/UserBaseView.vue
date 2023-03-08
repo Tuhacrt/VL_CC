@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import UserNavbar from '@/components/user/UserNavbar.vue';
+import UserHeader from '@/components/user/UserHeader.vue';
 import UserFooter from '@/components/user/UserFooter.vue';
 </script>
 <template>
-  <div class="container-fluid p-0">
-    <UserNavbar></UserNavbar>
+  <div class="container-fluid p-0 bg-background">
+    <UserHeader />
     <router-view />
-    <UserFooter></UserFooter>
+    <UserFooter />
   </div>
 </template>

@@ -23,7 +23,7 @@ import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import App from './App.vue';
 import Router from './router';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '@/assets/all.scss';
 import 'vue-awesome-paginate/dist/style.css';
 import 'ant-design-vue/dist/antd.css';
 import 'vue-loading-overlay/dist/css/index.css';

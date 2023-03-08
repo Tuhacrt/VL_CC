@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper';
+import { Navigation, Pagination, Autoplay, EffectFade, Scrollbar } from 'swiper';
 import { RouterLink } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
+import 'swiper/scss/effect-fade';
 
 import { useProductStore } from '@/stores/productStore';
 import { numberToNTD } from '@/utils/useMoney';
@@ -15,7 +15,7 @@ const productStore = useProductStore();
 const { gotToProduct } = productStore;
 const { products } = storeToRefs(productStore);
 
-const modules = [Navigation, Pagination, Autoplay, EffectFade];
+const modules = [Navigation, Pagination, Autoplay, EffectFade, Scrollbar];
 </script>
 <template>
   <div class="likes container-fluid py-4 py-md-7">
@@ -32,11 +32,13 @@ const modules = [Navigation, Pagination, Autoplay, EffectFade];
         :autoplay="{ delay: 3000, disableOnInteraction: false }"
         :loop="true"
         :space-between="12"
+        :navigation="{ enabled: false, hiddenClass: 'swiper-button-hidden' }"
         :pagination="{ clickable: true }"
         :breakpoints="{
           767: {
             slidesPerView: 3,
-            spaceBetween: 24
+            spaceBetween: 24,
+            navigation: { enabled: true }
           }
         }"
         style="--swiper-theme-color: #ce9d7b"
@@ -66,12 +68,15 @@ const modules = [Navigation, Pagination, Autoplay, EffectFade];
 @import '@/assets/all.scss';
 
 .likes {
-  background-color: #fff7f2;
+  background-color: $primary-light;
   &-title a {
-    text-decoration: none;
     font-weight: bold;
-    color: #ce9d7b;
-    border: 2px solid #ce9d7b;
+    color: $primary;
+    border: 2px solid $primary;
+    &:hover {
+      color: $primary-heavy;
+      border: 2px solid $primary-heavy;
+    }
   }
 }
 
@@ -83,7 +88,7 @@ const modules = [Navigation, Pagination, Autoplay, EffectFade];
     height: 156px;
   }
   &-text {
-    color: #ce9d7b;
+    color: $primary;
   }
 
   @include media-breakpoint-up(md) {

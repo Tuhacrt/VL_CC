@@ -6,10 +6,12 @@ import type { Product } from '@/types';
 import FindMoreModal from '@/components/user/UserFindMoreModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import { useCartStore } from '@/stores/cartStore';
-import { useProductStore } from '@/stores/productStore'; // eslint-disable-line
+import { useProductStore } from '@/stores/productStore'; 
 import { useLoadingStore } from '@/stores/loadingStore';
 
 const findMoreModalRef = ref<typeof FindMoreModal>();
+
+
 
 const loadingStore = useLoadingStore();
 const { isLoading } = storeToRefs(loadingStore);

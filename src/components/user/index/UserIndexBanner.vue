@@ -25,6 +25,7 @@
 <style lang="scss" scoped>
 @import '@/assets/all.scss';
 .banner {
+  background-color: #fafafa;
   img {
     height: 160px;
     object-fit: cover;

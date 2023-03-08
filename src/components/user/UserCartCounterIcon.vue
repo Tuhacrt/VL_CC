@@ -11,15 +11,17 @@ onMounted(() => {
   getCart();
 });
 </script>
+
 <template>
   <span
     v-if="carts?.carts.length"
-    class="cart-store position-absolute top-50 translate-middle p-1 border border-light rounded-circle text-white"
+    class="cart-store position-absolute translate-middle p-1 border border-light rounded-circle text-white"
   >
     {{ carts?.carts.length }}
     <span class="visually-hidden"></span>
   </span>
 </template>
+
 <style lang="scss" scoped>
 @import '@/assets/all.scss';
 .cart-store {
@@ -27,9 +29,10 @@ onMounted(() => {
   height: 28px;
   font-size: 12px;
   background-color: #ce9d7b;
-  left: 62%;
+  top: 50%;
+  left: 60%;
   @include media-breakpoint-up(md) {
-    left: 65%;
+    left: 66%;
   }
 }
 </style>

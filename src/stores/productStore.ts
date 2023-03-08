@@ -1,6 +1,7 @@
 import { onMounted, ref } from 'vue';
 import { defineStore, storeToRefs } from 'pinia';
 import axios, { AxiosError } from 'axios';
+// import { useRoute } from 'vue-router';
 import router from '@/router';
 
 import type { Pagination, Product, Products } from '@/types';
@@ -35,9 +36,23 @@ export const useProductStore = defineStore('product', () => {
     }
   };
 
+  const getProduct = async (id: string) => {
+    const url = `${VITE_URL}/api/${VITE_PATH}/product/${id}`;
+    isLoading.value = true;
+
+    try {
+      const response = await axios.get(url);
+      isLoading.value = false;
+      tempProduct.value = response.data.product;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) alert(err.response?.data.message);
+    }
+  };
+
   const gotToProduct = async (currentProduct: Product) => {
     const { id } = currentProduct;
     const url = `${VITE_URL}/api/${VITE_PATH}/product/${id}`;
+    getProduct(id);
     isLoading.value = true;
 
     try {
@@ -54,5 +69,5 @@ export const useProductStore = defineStore('product', () => {
     getProductList();
   });
 
-  return { products, tempProduct, getProductList, gotToProduct };
+  return { products, tempProduct, getProductList, getProduct, gotToProduct };
 });

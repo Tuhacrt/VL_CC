@@ -1,5 +1,5 @@
 <template>
-  <div class="intro container-fluid p-0 p-md-2 text-white mb-3">
+  <div class="intro container-fluid p-0 p-md-2 text-white pb-3">
     <div class="container py-7 px-3">
       <div class="intro-title position-relative">
         <h2 class="fw-bold text-white mb-3">攝影 <br />是人生每個時刻的註解</h2>
@@ -18,9 +18,9 @@
 .intro {
   background-image: url('@/images/vl_guitar_intro.jpg');
   background-size: cover;
-  background-position: calc(-100px + 10cqw) 0;
-  @include media-breakpoint-up(md) {
-    background-position: calc(-5cqw) calc(60cqw);
+  background-position: calc(-230px + 30cqw) 30%;
+  @include media-breakpoint-up(sm) {
+    background-position: calc(-5cqw) 30%;
   }
 }
 .break-line {

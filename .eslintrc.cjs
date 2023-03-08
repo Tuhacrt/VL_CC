@@ -29,6 +29,7 @@ module.exports = {
     'no-alert': 'off',
     'no-console': 'off',
     'no-unused-vars': 'off',
+    'no-restricted-syntax': 'off',
     'prettier/prettier': ['warn', { semi: true }],
     'import/prefer-default-export': 'off'
   }

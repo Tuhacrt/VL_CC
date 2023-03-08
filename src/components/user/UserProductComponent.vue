@@ -1,14 +1,23 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
+import { useRoute } from 'vue-router';
 
 import { useCartStore } from '@/stores/cartStore';
 import { useProductStore } from '@/stores/productStore';
+import { onMounted } from 'vue';
 
+const route = useRoute();
 const cartStore = useCartStore();
 const { addToCart } = cartStore;
 const productStore = useProductStore();
+const { getProduct } = productStore;
 const { tempProduct } = storeToRefs(productStore);
 const quantity = 1;
+
+onMounted(() => {
+  const { id } = tempProduct.value;
+  if (id !== route.params?.id) getProduct(route.params?.id as string);
+});
 </script>
 
 <template>
@@ -62,5 +71,3 @@ const quantity = 1;
     </div>
   </div>
 </template>
-
-<style scoped lang="scss"></style>

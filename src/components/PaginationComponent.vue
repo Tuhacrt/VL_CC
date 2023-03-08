@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { ref, toRef, computed } from 'vue';
-import type { Pagination } from '@/types';
+import { ref, computed, watch } from 'vue';
 
-const props = defineProps<{ pagination: Pagination }>();
-const emit = defineEmits(['change-page']);
+import { storeToRefs } from 'pinia';
+import { useProductStore } from '@/stores/productStore';
+
+const productStore = useProductStore();
+const { getProductList } = productStore;
+const { products } = storeToRefs(productStore);
+
 const paginationComponentRef = ref<HTMLDivElement | string>('');
-const localPagination = toRef(props, 'pagination');
-const totalItems = computed<number>(() => localPagination.value.total_pages * 10);
-const currentPage = ref<number>(1);
+const totalItems = computed<number>(() => (products.value?.pagination.total_pages || 1) * 10);
+const currentPage = ref<number>(products.value?.pagination.current_page || 1);
+
+watch(products, (newVal) => {
+  currentPage.value = newVal.pagination.current_page;
+});
 
 const onClickPage = (page: number) => {
-  emit('change-page', page);
+  getProductList(page, products.value?.pagination.category || '');
 };
 </script>
 

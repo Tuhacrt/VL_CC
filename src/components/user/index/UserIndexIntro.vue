@@ -6,7 +6,7 @@
         <div class="position-relative p-2"><div class="break-line"></div></div>
       </div>
       <p class="mt-4 fs-6">
-        每段人生旅程都是一場精彩的冒險，VL&CC讓您紀錄所有美好瞬間， 傳遞每一段人生旅程的故事，
+        每段人生旅程都是一場精彩的冒險， VL & CC 讓您紀錄所有美好瞬間， 傳遞每一段人生旅程的故事，
         讓您隨時重溫美好回憶，紀念美好時光。
       </p>
     </div>

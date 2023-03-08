@@ -17,14 +17,51 @@ export const useProductStore = defineStore('product', () => {
   const tempProduct = ref<Product>({
     imagesUrl: [] as string[]
   } as Product);
+  const productsAll = ref<Products>({
+    products: [] as Product[],
+    pagination: {} as Pagination
+  } as Products);
+  const categories = ref<string[]>([
+    '所有產品',
+    '肖像攝影',
+    '藝術攝影',
+    '商業攝影',
+    '婚禮拍攝',
+    '日常拍攝',
+    '旅遊拍攝'
+  ]);
   const loadingStore = useLoadingStore();
   const { isLoading } = storeToRefs(loadingStore);
 
-  const getProductList = async (
-    currentPage: number = products.value?.pagination.current_page || 1
-  ) => {
-    const url = `${VITE_URL}/api/${VITE_PATH}/products?page=${currentPage}`;
+  const getCategoryList = () => {
+    const categorySet = new Set<string>();
+    products.value?.products.map((elem) => categorySet.add(elem.category));
+    for (const category of categorySet) {
+      categories.value.push(category);
+    }
+  };
+
+  const getProductAll = async () => {
+    const url = `${VITE_URL}/api/${VITE_PATH}/products/all`;
     isLoading.value = true;
+
+    try {
+      const response = await axios.get(url);
+      isLoading.value = false;
+      productsAll.value = response.data;
+      getCategoryList();
+    } catch (err: unknown) {
+      isLoading.value = false;
+      if (err instanceof AxiosError) alert(err.response?.data.message);
+    }
+  };
+
+  const getProductList = async (
+    currentPage: number = products.value?.pagination.current_page || 1,
+    category: string = products.value?.pagination.category || ''
+  ) => {
+    let url = `${VITE_URL}/api/${VITE_PATH}/products?page=${currentPage}`;
+    if (category !== '') url += `&category=${category}`;
 
     try {
       const response = await axios.get(url);
@@ -66,8 +103,9 @@ export const useProductStore = defineStore('product', () => {
   };
 
   onMounted(() => {
+    getProductAll();
     getProductList();
   });
 
-  return { products, tempProduct, getProductList, getProduct, gotToProduct };
+  return { products, tempProduct, categories, getProductList, getProduct, gotToProduct };
 });

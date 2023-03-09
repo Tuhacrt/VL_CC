@@ -106,7 +106,11 @@ const openModal = (modalType: string, currentProduct: Product) => {
           </div>
         </div>
         <div class="d-flex justify-content-center">
-          <PaginationComponent ref="paginationComponentRef" />
+          <PaginationComponent
+            ref="paginationComponentRef"
+            :pagination="products?.pagination"
+            @change-page="getProductList"
+          />
         </div>
       </div>
     </div>

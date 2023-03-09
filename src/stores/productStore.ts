@@ -52,17 +52,14 @@ export const useProductStore = defineStore('product', () => {
       const response = await axios.get(url);
       isLoading.value = false;
       productsAll.value = response.data;
-      await getCategoryList();
+      getCategoryList();
     } catch (err: unknown) {
       isLoading.value = false;
       if (err instanceof AxiosError) alert(err.response?.data.message);
     }
   };
 
-  const getProductList = async (
-    currentPage: number = products.value?.pagination.current_page || 1,
-    category: string = products.value?.pagination.category || ''
-  ) => {
+  const getProductList = async (currentPage: number = 1, category: string = '') => {
     let url = `${VITE_URL}/api/${VITE_PATH}/products?page=${currentPage}`;
     if (category !== '' && category !== '所有產品') url += `&category=${category}`;
     isLoading.value = true;

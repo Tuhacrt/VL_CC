@@ -32,7 +32,7 @@ defineExpose({ showModal, hideModal });
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content border-0">
         <div class="modal-header bg-dark text-white">
-          <h5 id="findMoreModalLabel" class="modal-title">
+          <h5 id="findMoreModalLabel" class="modal-title text-white">
             <span>{{ productData.title }}</span>
           </h5>
           <button
@@ -69,7 +69,7 @@ defineExpose({ showModal, hideModal });
                   <input v-model.number="quantity" min="1" type="number" class="form-control" />
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-primary text-white"
                     @click="addToCart(productData.id, quantity), resetQuantity(), hideModal()"
                   >
                     加入購物車

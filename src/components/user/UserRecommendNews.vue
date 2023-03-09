@@ -17,6 +17,7 @@
                 因應後疫情潮流，VLCC旅拍服務即日起 至2/13日享有9折優惠。
               </p>
             </div>
+            <a href="javascript:;" class="stretched-link"></a>
           </div>
         </div>
         <div class="col-md-6 mb-3">
@@ -31,6 +32,7 @@
                 因應新年新婚潮，凡是購買婚禮攝影的 客戶皆可以無條件升級水晶相框
               </p>
             </div>
+            <a href="javascript:;" class="stretched-link"></a>
           </div>
         </div>
         <div class="col-md-12 mb-3">
@@ -47,6 +49,7 @@
               <h5 class="card-title text-white pb-3 border-bottom mb-3">攝影師行程表</h5>
               <p class="card-text text-white">目前VL以及CC兩位攝影師都還有空缺的 日程可供預約。</p>
             </div>
+            <a href="javascript:;" class="stretched-link"></a>
           </div>
         </div>
       </div>
@@ -70,6 +73,7 @@
     object-fit: cover;
     height: 100%;
     &-overlay {
+      // background: #000 !important;
       top: 50%;
       height: 50%;
       @include media-breakpoint-up(xl) {
@@ -78,5 +82,9 @@
       }
     }
   }
+}
+
+.card:hover .card-img-overlay {
+  background-color: #9e5d3080 !important;
 }
 </style>

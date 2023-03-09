@@ -30,6 +30,7 @@ export const useProductStore = defineStore('product', () => {
     '日常拍攝',
     '旅遊拍攝'
   ]);
+  const defaultCategorySet = new Set<string>(categories.value);
   const loadingStore = useLoadingStore();
   const { isLoading } = storeToRefs(loadingStore);
 
@@ -37,7 +38,9 @@ export const useProductStore = defineStore('product', () => {
     const categorySet = new Set<string>();
     products.value?.products.map((elem) => categorySet.add(elem.category));
     for (const category of categorySet) {
-      categories.value.push(category);
+      if (defaultCategorySet.has(category) === false) {
+        categories.value.push(category);
+      }
     }
   };
 
@@ -49,7 +52,7 @@ export const useProductStore = defineStore('product', () => {
       const response = await axios.get(url);
       isLoading.value = false;
       productsAll.value = response.data;
-      getCategoryList();
+      await getCategoryList();
     } catch (err: unknown) {
       isLoading.value = false;
       if (err instanceof AxiosError) alert(err.response?.data.message);
@@ -61,7 +64,8 @@ export const useProductStore = defineStore('product', () => {
     category: string = products.value?.pagination.category || ''
   ) => {
     let url = `${VITE_URL}/api/${VITE_PATH}/products?page=${currentPage}`;
-    if (category !== '') url += `&category=${category}`;
+    if (category !== '' && category !== '所有產品') url += `&category=${category}`;
+    isLoading.value = true;
 
     try {
       const response = await axios.get(url);

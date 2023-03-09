@@ -16,7 +16,8 @@ watch(products, (newVal) => {
   currentPage.value = newVal.pagination.current_page;
 });
 
-const onClickPage = (page: number) => {
+const onClickPage = (page: number, position?: number) => {
+  window.scrollTo({ top: position || 300, behavior: 'smooth' });
   getProductList(page, products.value?.pagination.category || '');
 };
 </script>

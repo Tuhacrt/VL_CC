@@ -31,6 +31,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-restricted-syntax': 'off',
     'prettier/prettier': ['warn', { semi: true }],
-    'import/prefer-default-export': 'off'
+    'import/prefer-default-export': 'off',
+    'vuejs-accessibility/anchor-has-content': 'off'
   }
 };

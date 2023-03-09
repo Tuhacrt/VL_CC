@@ -9,6 +9,7 @@ import PaginationComponent from '@/components/PaginationComponent.vue';
 import { useCartStore } from '@/stores/cartStore';
 import { useProductStore } from '@/stores/productStore'; // eslint-disable-line
 import { useLoadingStore } from '@/stores/loadingStore';
+import { numberToNTD } from '@/utils/useMoney';
 
 const findMoreModalRef = ref<typeof FindMoreModal>();
 
@@ -19,6 +20,10 @@ const { getProductList, gotToProduct } = productStore;
 const { products, tempProduct, categories } = storeToRefs(productStore);
 const cartStore = useCartStore();
 const { addToCart } = cartStore;
+
+const onClickProductList = () => {
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+};
 
 const openModal = (modalType: string, currentProduct: Product) => {
   switch (modalType) {
@@ -35,15 +40,14 @@ const openModal = (modalType: string, currentProduct: Product) => {
 <template>
   <UserIndexIntro />
   <div class="container">
-    <div class="row mt-4">
-      <div class="col-md-4">
+    <div class="row mt-5">
+      <div class="category-list col-md-3 mb-4">
         <div class="card border-0">
           <div
             class="card-header px-0 py-4 bg-white border border-bottom-0 border-top border-start-0 border-end-0 rounded-0"
           >
             <div class="d-flex justify-content-center align-items-center pe-1">
               <h4 class="mb-0">產品類別</h4>
-              <div class="border border-bottom border-primary"></div>
             </div>
           </div>
           <div class="card-body py-0">
@@ -52,7 +56,16 @@ const openModal = (modalType: string, currentProduct: Product) => {
                 <a
                   href="#"
                   class="py-2 d-block text-muted"
-                  @click.prevent="getProductList(1, `${category === '所有產品' ? '' : category}`)"
+                  :class="{
+                    active:
+                      category === '所有產品'
+                        ? '' === products.pagination.category
+                        : category === products.pagination.category
+                  }"
+                  @click.prevent="
+                    getProductList(1, `${category}`);
+                    onClickProductList();
+                  "
                   >{{ category }}</a
                 >
               </li>
@@ -62,72 +75,41 @@ const openModal = (modalType: string, currentProduct: Product) => {
       </div>
       <!-- Product List -->
       <div class="col-md-8">
-        <table class="table align-middle">
-          <thead>
-            <tr>
-              <th>圖片</th>
-              <th>商品名稱</th>
-              <th>價格</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody v-if="products?.products?.length">
-            <tr v-for="product in products?.products" :key="product.id">
-              <td style="width: 200px">
-                <div
-                  v-if="product.imagesUrl"
-                  style="height: 100px; background-size: cover; background-position: center"
-                  :style="{ backgroundImage: `url(${product?.imagesUrl[0]})` }"
-                />
-              </td>
-              <td>{{ product.title }}</td>
-              <td>
-                <div v-if="product.price < product.origin_price">
-                  <del class="h6">原價 {{ product.origin_price }} 元</del>
-                  <div class="h5">{{ product.price }} 元</div>
+        <div v-if="products.products.length" class="product-list row">
+          <div v-for="product in products.products" :key="product.id" class="col-md-6">
+            <div class="card rounded-0 mb-4">
+              <div class="card-body text-start rounded-0 p-2">
+                <div class="card-img-wrapper position-relative mb-2">
+                  <a href="#" class="stretched-link" @click.prevent="gotToProduct(product)">
+                    <img
+                      class="card-img rounded-0"
+                      :src="product?.imagesUrl[0]"
+                      :alt="product.title"
+                  /></a>
                 </div>
-                <div v-else class="h5">{{ product.origin_price }} 元</div>
-              </td>
-              <td>
-                <div class="btn-group btn-group-sm">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    :disabled="isLoading"
-                    @click="gotToProduct(product)"
-                  >
-                    詳細頁面
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    :disabled="isLoading"
-                    @click="openModal('findMore', product)"
-                  >
-                    查看描述
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger"
-                    :disabled="isLoading"
-                    @click="addToCart(product.id)"
-                  >
-                    加到購物車
-                  </button>
+                <div class="card-text row">
+                  <h6 class="card-title col-12">{{ product.title }}</h6>
+                  <div class="col-12 d-flex justify-content-between">
+                    <p class="card-text fs-6 pt-1 mb-0">{{ numberToNTD(product?.price) }}</p>
+                    <button
+                      type="button"
+                      class="btn btn-find-more btn-sm btn-primary text-white"
+                      :disabled="isLoading"
+                      @click.prevent="openModal('findMore', product)"
+                    >
+                      加入購物車
+                    </button>
+                  </div>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <PaginationComponent ref="paginationComponentRef" />
+        </div>
       </div>
     </div>
-    <!-- Product List -->
-    <!-- Pagination -->
-    <div class="d-flex justify-content-center">
-      <PaginationComponent ref="paginationComponentRef" />
-    </div>
-    <!-- Pagination -->
   </div>
   <!-- Modal -->
   <FindMoreModal ref="findMoreModalRef" :temp-product="tempProduct" :add-to-cart="addToCart" />
@@ -136,3 +118,28 @@ const openModal = (modalType: string, currentProduct: Product) => {
   <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="true" />
   <!--  Loading Component-->
 </template>
+
+<style scoped lang="scss">
+@import '@/assets/all.scss';
+.product-list {
+  .card {
+    height: 240px;
+
+    &-img {
+      object-fit: cover;
+      height: 160px;
+    }
+
+    @include media-breakpoint-up(md) {
+      height: 320px;
+      &-img {
+        height: 240px;
+      }
+    }
+  }
+}
+.active {
+  font-weight: bold;
+  color: $primary-heavy !important;
+}
+</style>

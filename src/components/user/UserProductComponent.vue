@@ -22,9 +22,8 @@ onMounted(() => {
 
 <template>
   <div class="container-fluid bg-background">
-    <div class="container">
+    <div class="container py-5">
       <div class="about">
-        <h1>{{ tempProduct.title }}</h1>
         <div class="modal-body">
           <div class="row">
             <div class="col-sm-6">
@@ -36,14 +35,13 @@ onMounted(() => {
               />
             </div>
             <div class="col-sm-6">
+              <h1>{{ tempProduct.title }}</h1>
               <span class="badge bg-primary rounded-pill">{{ tempProduct.category }}</span>
               <p>商品描述：{{ tempProduct.description }}</p>
               <p>商品內容：{{ tempProduct.content }}</p>
-              <div v-if="tempProduct.price < tempProduct.origin_price" class="h5">
-                {{ tempProduct.origin_price }} 元
-              </div>
+              <div v-if="!tempProduct.price" class="h5">{{ tempProduct.origin_price }} 元</div>
               <div v-else>
-                <del class="h6">原價 {{ tempProduct.origin_price }} 元</del>
+                <del class="h6 text-muted">原價 {{ tempProduct.origin_price }} 元</del>
                 <div class="h5">現在只要 {{ tempProduct.price }} 元</div>
               </div>
               <div>

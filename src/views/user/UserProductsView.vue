@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
+import { Collapse } from 'bootstrap';
 
 import type { Product } from '@/types';
 import FindMoreModal from '@/components/user/UserFindMoreModal.vue';
@@ -12,6 +13,8 @@ import { useLoadingStore } from '@/stores/loadingStore';
 import { numberToNTD } from '@/utils/useMoney';
 
 const findMoreModalRef = ref<typeof FindMoreModal>();
+const collapseRef = ref<HTMLDivElement | string>('');
+const collapse = ref<Collapse | null>(null);
 
 const loadingStore = useLoadingStore();
 const { isLoading } = storeToRefs(loadingStore);
@@ -20,6 +23,12 @@ const { getProductList, gotToProduct } = productStore;
 const { products, tempProduct, categories } = storeToRefs(productStore);
 const cartStore = useCartStore();
 const { addToCart } = cartStore;
+
+onMounted(() => {
+  let toggle = true;
+  if (window.innerWidth < 767) toggle = false;
+  collapse.value = new Collapse(collapseRef.value, { toggle });
+});
 
 const onClickProductList = () => {
   window.scrollTo({ top: 300, behavior: 'smooth' });
@@ -42,34 +51,45 @@ const openModal = (modalType: string, currentProduct: Product) => {
   <div class="container">
     <div class="row mt-5">
       <div class="category-list col-md-3 mb-4">
-        <div class="card border-0">
+        <div id="#cardOne" class="card border-0">
           <div
+            id="headingOne"
             class="card-header px-0 py-4 bg-white border border-bottom-0 border-top border-start-0 border-end-0 rounded-0"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseOne"
           >
             <div class="d-flex justify-content-center align-items-center pe-1">
               <h4 class="mb-0">產品類別</h4>
             </div>
           </div>
-          <div class="card-body py-0">
-            <ul v-if="categories?.length" class="sidebar-categories list-unstyled">
-              <li v-for="category of categories" :key="category" class="categories-item">
-                <a
-                  href="#"
-                  class="py-2 d-block text-muted"
-                  :class="{
-                    active:
-                      category === '所有產品'
-                        ? '' === products.pagination.category
-                        : category === products.pagination.category
-                  }"
-                  @click.prevent="
-                    getProductList(1, `${category}`);
-                    onClickProductList();
-                  "
-                  >{{ category }}</a
-                >
-              </li>
-            </ul>
+          <div
+            id="collapseOne"
+            ref="collapseRef"
+            class="collapse"
+            aria-labelledby="headingOne"
+            data-bs-parent="#cardOne"
+          >
+            <div class="card-body py-0">
+              <ul v-if="categories?.length" class="sidebar-categories list-unstyled">
+                <li v-for="category of categories" :key="category" class="categories-item">
+                  <a
+                    href="#"
+                    class="py-2 d-block text-muted"
+                    :class="{
+                      active:
+                        category === '所有產品'
+                          ? '' === products.pagination.category
+                          : category === products.pagination.category
+                    }"
+                    @click.prevent="
+                      getProductList(1, `${category}`);
+                      onClickProductList();
+                    "
+                    >{{ category }}</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -115,12 +135,8 @@ const openModal = (modalType: string, currentProduct: Product) => {
       </div>
     </div>
   </div>
-  <!-- Modal -->
   <FindMoreModal ref="findMoreModalRef" :temp-product="tempProduct" :add-to-cart="addToCart" />
-  <!-- Modal -->
-  <!--  Loading Component-->
   <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="true" />
-  <!--  Loading Component-->
 </template>
 
 <style scoped lang="scss">

@@ -13,8 +13,12 @@ watch(localPagination, (newVal) => {
   currentPage.value = newVal.current_page;
 });
 
-const onClickPage = (nextPage: number) => {
-  emit('change-page', nextPage, localPagination.value.category);
+const onClickPage = (
+  nextPage: number = 1,
+  nextCategory: string = localPagination.value.category || ''
+) => {
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+  emit('change-page', nextPage, nextCategory);
 };
 </script>
 
@@ -57,72 +61,56 @@ const onClickPage = (nextPage: number) => {
   </div>
 </template>
 
-<style>
-.pagination-component .paginate-buttons {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  background-color: #e6e6e6;
-  border: none;
-}
-
-.pagination-component .back-button,
-.pagination-component .next-button {
-  margin-inline: 10px;
-  border-radius: 25px;
-}
-
-.pagination-component .first-button {
-  border-start-start-radius: 25px;
-  border-end-start-radius: 25px;
-}
-
-.pagination-component .last-button {
-  border-start-end-radius: 25px;
-  border-end-end-radius: 25px;
-}
-
-.pagination-component .back-button svg {
-  transform: rotate(180deg) translateY(1px);
-}
-
-.pagination-component .next-button svg {
-  transform: translateY(-1px);
-}
-
-/* select second element of .paginate-buttons */
-.pagination-component li:nth-child(2) > .paginate-buttons.number-buttons {
-  border-start-start-radius: 25px;
-  border-end-start-radius: 25px;
-  transition: none;
-}
-
-/* select one element before last of .paginate-buttons */
-.pagination-component li:nth-last-child(2) > .paginate-buttons.number-buttons {
-  border-start-end-radius: 25px;
-  border-end-end-radius: 25px;
-}
-
-.pagination-component .active-page {
-  background-color: #0d6efd;
-  color: #fff;
-}
-
-.pagination-component .active-page {
-  background-color: #0d6efd;
-  color: #fff;
-}
-
-.pagination-component .paginate-buttons:hover {
-  background-color: #f5f5f5;
-}
-
-.pagination-component .active-page:hover {
-  background-color: #0d6efd;
-}
-
-.pagination-component .back-button:active,
-.pagination-component .next-button:active {
-  background-color: #e6e6e6;
+<style scoped lang="scss">
+.pagination-component :deep() {
+  .paginate-buttons {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background-color: #e6e6e6;
+    border: none;
+  }
+  .back-button,
+  .next-button {
+    margin-inline: 10px;
+    border-radius: 25px;
+  }
+  .first-button {
+    border-start-start-radius: 25px;
+    border-end-start-radius: 25px;
+  }
+  .last-button {
+    border-start-end-radius: 25px;
+    border-end-end-radius: 25px;
+  }
+  .back-button svg {
+    transform: rotate(180deg) translateY(1px);
+  }
+  .next-button svg {
+    transform: translateY(-1px);
+  }
+  li:nth-child(2) > .paginate-buttons.number-buttons {
+    border-start-start-radius: 25px;
+    border-end-start-radius: 25px;
+    transition: none;
+  }
+  li:nth-last-child(2) > .paginate-buttons.number-buttons {
+    border-start-end-radius: 25px;
+    border-end-end-radius: 25px;
+  }
+  .active-page {
+    background-color: #0d6efd;
+    color: #fff;
+  }
+  .paginate-buttons:hover {
+    background-color: #f5f5f5;
+  }
+  .active-page:hover {
+    background-color: #0d6efd;
+  }
+  .back-button:active,
+  .next-button:active {
+    background-color: #e6e6e6;
+  }
 }
 </style>

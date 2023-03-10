@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Collapse } from 'bootstrap';
+
 import UserCartCounterIcon from './UserCartCounterIcon.vue';
 
 const collapseRef = ref<HTMLDivElement | string>('');

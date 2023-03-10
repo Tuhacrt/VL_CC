@@ -14,7 +14,7 @@ watch(localPagination, (newVal) => {
 });
 
 const onClickPage = (
-  nextPage: number = 1,
+  nextPage: number = localPagination.value.current_page || 1,
   nextCategory: string = localPagination.value.category || ''
 ) => {
   window.scrollTo({ top: 300, behavior: 'smooth' });

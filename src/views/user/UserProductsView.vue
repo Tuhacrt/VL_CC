@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { Collapse } from 'bootstrap';
 
@@ -28,6 +28,10 @@ onMounted(() => {
   let toggle = true;
   if (window.innerWidth < 767) toggle = false;
   collapse.value = new Collapse(collapseRef.value, { toggle });
+});
+
+onUnmounted(() => {
+  getProductList();
 });
 
 const onClickProductList = () => {

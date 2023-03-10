@@ -57,7 +57,7 @@ watch(router, () => {
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/admin/products" class="pe-0 pe-md-0"> 後檯介面 </router-link>
+              <router-link to="/admin/products" class="pe-0 pe-md-0"> 後台介面 </router-link>
             </li>
           </ul>
         </div>

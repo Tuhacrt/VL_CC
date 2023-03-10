@@ -1,43 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import axios, { AxiosError } from 'axios';
-import { Form } from 'vee-validate';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
-import type { UserForm, User } from '@/types';
 import { useCartStore } from '@/stores/cartStore';
 import { useLoadingStore } from '@/stores/loadingStore';
+import UserMayLike from '@/components/user/UserMayLike.vue';
 
-const { VITE_URL, VITE_PATH } = import.meta.env;
-const formRef = ref<typeof Form>();
+const router = useRouter();
 
 const loadingStore = useLoadingStore();
 const { isLoading } = storeToRefs(loadingStore);
 const cartStore = useCartStore();
-const { getCart, updateCart, deleteAllCarts, deleteCartItem } = cartStore;
+const { updateCart, deleteAllCarts, deleteCartItem } = cartStore;
 const { carts } = storeToRefs(cartStore);
-
-const form = ref<UserForm>({
-  user: {} as User,
-  message: '' as string
-});
-
-const createOrder = async () => {
-  const url = `${VITE_URL}/api/${VITE_PATH}/order`;
-  const data = form.value;
-  isLoading.value = true;
-
-  try {
-    const response = await axios.post(url, { data });
-    isLoading.value = false;
-    formRef.value?.resetForm();
-    alert(response.data.message);
-    getCart();
-  } catch (err: unknown) {
-    isLoading.value = false;
-    if (err instanceof AxiosError) alert(err.response?.data.message);
-  }
-};
 </script>
 
 <template>
@@ -48,14 +23,14 @@ const createOrder = async () => {
         <button
           class="btn btn-outline-danger"
           type="button"
-          :disabled="!carts?.carts?.length"
+          :style="{ display: carts.carts?.length === 0 ? 'none' : 'inline-block' }"
           @click="deleteAllCarts"
         >
           清空購物車
         </button>
       </div>
-      <div v-if="!carts?.carts?.length" class="h1 text-white font-weight-bold bg-dark">
-        購物車是空的喔！
+      <div v-if="!carts?.carts?.length" class="p-2">
+        <p class="h1 text-primary font-weight-bold mb-5">購物車是空的喔！</p>
       </div>
       <table v-else class="table align-middle">
         <thead>
@@ -64,6 +39,7 @@ const createOrder = async () => {
             <th>品名</th>
             <th style="width: 150px">數量/單位</th>
             <th>單價</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -101,6 +77,11 @@ const createOrder = async () => {
                   </div>
                 </div>
               </td>
+              <td>
+                <p>
+                  {{ item.product?.price || item.product?.origin_price }}
+                </p>
+              </td>
               <td class="text-end">
                 <small v-if="item.product.price < item.product.origin_price" class="text-success"
                   >折扣價：{{ item.final_total }}</small
@@ -112,12 +93,14 @@ const createOrder = async () => {
         </tbody>
         <tfoot>
           <tr v-if="carts.final_total < carts.total">
+            <td />
             <td colspan="3" class="text-end text-success">折扣價</td>
             <td class="text-end text-success">
               {{ carts.final_total }}
             </td>
           </tr>
           <tr v-else>
+            <td />
             <td colspan="3" class="text-end">總計</td>
             <td class="text-end">
               {{ carts.total }}
@@ -125,92 +108,19 @@ const createOrder = async () => {
           </tr>
         </tfoot>
       </table>
+      <div class="text-end my-4">
+        <button
+          class="btn btn-success"
+          type="button"
+          :style="{ display: carts.carts?.length === 0 ? 'none' : 'inline-block' }"
+          @click="router.push('/order')"
+        >
+          付款結帳
+        </button>
+      </div>
+      <UserMayLike />
     </div>
     <!-- Cart -->
-
-    <!-- Form -->
-    <div class="my-5 row justify-content-center">
-      <Form ref="formRef" v-slot="{ errors }" class="col-md-6" @submit="createOrder">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <Field
-            id="email"
-            v-model="form.user.email"
-            name="email"
-            label="Email"
-            type="email"
-            class="form-control"
-            :class="{ 'is-invalid': errors.email }"
-            placeholder="請輸入 Email"
-            rules="required|email"
-          />
-          <ErrorMessage name="email" class="invalid-feedback" />
-        </div>
-        <div class="mb-3">
-          <label for="name" class="form-label">收件人姓名</label>
-          <Field
-            id="name"
-            v-model="form.user.name"
-            name="name"
-            label="姓名"
-            type="text"
-            class="form-control"
-            :class="{ 'is-invalid': errors.name }"
-            placeholder="請輸入姓名"
-            rules="required"
-          />
-          <ErrorMessage name="name" class="invalid-feedback" />
-        </div>
-        <div class="mb-3">
-          <label for="tel" class="form-label">收件人電話</label>
-          <Field
-            id="tel"
-            v-model="form.user.tel"
-            name="tel"
-            label="電話"
-            type="tel"
-            class="form-control"
-            :class="{ 'is-invalid': errors.tel }"
-            placeholder="請輸入電話"
-            rules="required|min:8|max:10"
-          />
-          <ErrorMessage name="tel" class="invalid-feedback" />
-        </div>
-        <div class="mb-3">
-          <label for="address" class="form-label">收件人地址</label>
-          <Field
-            id="address"
-            v-model="form.user.address"
-            name="address"
-            label="地址"
-            type="text"
-            class="form-control"
-            :class="{ 'is-invalid': errors.address }"
-            placeholder="請輸入地址"
-            rules="required"
-          />
-          <ErrorMessage name="address" class="invalid-feedback" />
-        </div>
-        <div class="mb-3">
-          <label for="message" class="form-label">留言</label>
-          <Field
-            id="message"
-            v-model="form.message"
-            name="message"
-            as="textarea"
-            class="form-control"
-            cols="30"
-            rows="10"
-          />
-        </div>
-        <div class="text-end">
-          <button type="submit" class="btn btn-danger" :disabled="!carts?.total || isLoading">
-            送出訂單
-          </button>
-        </div>
-      </Form>
-    </div>
-    <!-- Form -->
   </div>
   <!--  Loading Component-->
   <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="true" />

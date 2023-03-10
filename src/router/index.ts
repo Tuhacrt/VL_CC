@@ -33,6 +33,16 @@ const router = createRouter({
           component: () => import('@/views/user/UserCartView.vue')
         },
         {
+          path: '/order',
+          name: '訂單填寫',
+          component: () => import('@/views/user/UserOrderView.vue')
+        },
+        {
+          path: '/order/success',
+          name: '訂單完成',
+          component: () => import('@/views/user/UserOrderSuccessView.vue')
+        },
+        {
           path: '/:pathMatch(.*)*',
           component: () => import('@/views/NotFound.vue')
         }

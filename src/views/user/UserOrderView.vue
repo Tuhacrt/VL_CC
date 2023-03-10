@@ -7,14 +7,16 @@ import { storeToRefs } from 'pinia';
 import type { UserForm, User } from '@/types';
 import { useCartStore } from '@/stores/cartStore';
 import { useLoadingStore } from '@/stores/loadingStore';
+import { useRouter } from 'vue-router';
 
 const { VITE_URL, VITE_PATH } = import.meta.env;
 const formRef = ref<typeof Form>();
+const router = useRouter();
 
 const loadingStore = useLoadingStore();
 const { isLoading } = storeToRefs(loadingStore);
 const cartStore = useCartStore();
-const { getCart, updateCart, deleteAllCarts, deleteCartItem } = cartStore;
+const { getCart } = cartStore;
 const { carts } = storeToRefs(cartStore);
 
 const form = ref<UserForm>({
@@ -33,6 +35,7 @@ const createOrder = async () => {
     formRef.value?.resetForm();
     alert(response.data.message);
     getCart();
+    router.push('/');
   } catch (err: unknown) {
     isLoading.value = false;
     if (err instanceof AxiosError) alert(err.response?.data.message);
@@ -42,94 +45,39 @@ const createOrder = async () => {
 
 <template>
   <div class="container">
-    <!-- Cart -->
-    <div class="mt-4">
-      <div class="text-end">
-        <button
-          class="btn btn-outline-danger"
-          type="button"
-          :disabled="!carts?.carts?.length"
-          @click="deleteAllCarts"
-        >
-          清空購物車
-        </button>
-      </div>
-      <div v-if="!carts?.carts?.length" class="h1 text-white font-weight-bold bg-dark">
-        購物車是空的喔！
-      </div>
-      <table v-else class="table align-middle">
-        <thead>
-          <tr>
-            <th />
-            <th>品名</th>
-            <th style="width: 150px">數量/單位</th>
-            <th>單價</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="carts?.carts">
-            <tr v-for="item in carts.carts" :key="item.id">
-              <td>
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-sm"
-                  :disabled="isLoading"
-                  @click="deleteCartItem(item.id)"
-                >
-                  <div>移除購物車</div>
-                </button>
-              </td>
-              <td>
-                {{ item.product.title }}
-                <div v-if="item.product.price < item.product.origin_price" class="text-success">
-                  已套用優惠券
-                </div>
-              </td>
-              <td>
-                <div class="input-group input-group-sm">
-                  <div class="input-group mb-3">
-                    <input
-                      v-model.number="item.qty"
-                      aria-label="qty-input"
-                      min="1"
-                      type="number"
-                      class="form-control"
-                      :disabled="isLoading"
-                      @change="updateCart(item)"
-                    />
-                    <span id="basic-addon2" class="input-group-text">{{ item.product.unit }}</span>
-                  </div>
-                </div>
-              </td>
-              <td class="text-end">
-                <small v-if="item.product.price < item.product.origin_price" class="text-success"
-                  >折扣價：{{ item.final_total }}</small
-                >
-                <small v-else>{{ item.total }}</small>
-              </td>
-            </tr>
-          </template>
-        </tbody>
-        <tfoot>
-          <tr v-if="carts.final_total < carts.total">
-            <td colspan="3" class="text-end text-success">折扣價</td>
-            <td class="text-end text-success">
-              {{ carts.final_total }}
-            </td>
-          </tr>
-          <tr v-else>
-            <td colspan="3" class="text-end">總計</td>
-            <td class="text-end">
-              {{ carts.total }}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <!-- Cart -->
-
-    <!-- Form -->
     <div class="my-5 row justify-content-center">
+      <h5 class="text-center">填寫訂購表單</h5>
+      <div class="my-5 w-75">
+        <div class="position-relative m-4">
+          <div class="progress">
+            <div
+              class="progress-bar w-50"
+              role="progressbar"
+              aria-valuenow="50"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <button
+            type="button"
+            class="progress-bar-button position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill text-white"
+          >
+            商品確認
+          </button>
+          <button
+            type="button"
+            class="progress-bar-button position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill text-white"
+          >
+            表單填寫
+          </button>
+          <button
+            type="button"
+            class="progress-bar-button position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill"
+          >
+            訂購完成
+          </button>
+        </div>
+      </div>
       <Form ref="formRef" v-slot="{ errors }" class="col-md-6" @submit="createOrder">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
@@ -204,15 +152,24 @@ const createOrder = async () => {
           />
         </div>
         <div class="text-end">
-          <button type="submit" class="btn btn-danger" :disabled="!carts?.total || isLoading">
+          <button type="submit" class="btn btn-success" :disabled="!carts?.total || isLoading">
             送出訂單
           </button>
         </div>
       </Form>
     </div>
-    <!-- Form -->
   </div>
-  <!--  Loading Component-->
   <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="true" />
-  <!--  Loading Component-->
 </template>
+
+<style scoped lang="scss">
+@import '@/assets/all.scss';
+.progress {
+  height: 1px;
+  background-color: $secondary;
+  &-bar-button {
+    width: 6rem;
+    height: 2rem;
+  }
+}
+</style>

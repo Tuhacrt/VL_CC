@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 
 import { useCartStore } from '@/stores/cartStore';
 import { useProductStore } from '@/stores/productStore';
-import { onMounted } from 'vue';
+import { numberToNTD } from '@/utils/useMoney';
 
 const route = useRoute();
 const cartStore = useCartStore();
@@ -37,13 +38,9 @@ onMounted(() => {
             <div class="col-sm-6">
               <h1>{{ tempProduct.title }}</h1>
               <span class="badge bg-primary rounded-pill">{{ tempProduct.category }}</span>
-              <p>商品描述：{{ tempProduct.description }}</p>
-              <p>商品內容：{{ tempProduct.content }}</p>
-              <div v-if="!tempProduct.price" class="h5">{{ tempProduct.origin_price }} 元</div>
-              <div v-else>
-                <del class="h6 text-muted">原價 {{ tempProduct.origin_price }} 元</del>
-                <div class="h5">現在只要 {{ tempProduct.price }} 元</div>
-              </div>
+              <p class="text-start">商品描述：{{ tempProduct.description }}</p>
+              <p class="text-start">商品須知：{{ tempProduct.content }}</p>
+              <p class="h5">{{ numberToNTD(tempProduct?.price) }}</p>
               <div>
                 <div class="input-group">
                   <input
